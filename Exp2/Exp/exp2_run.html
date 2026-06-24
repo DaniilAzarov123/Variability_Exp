@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock classification experiment</title>
+
+    <!-- Plugins -->
+    <script src="https://unpkg.com/jspsych@8.2.2"></script> <!-- jsPsych -->
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script> <!-- Preload images -->
+    <script src="https://unpkg.com/@jspsych/plugin-categorize-image@2.1.0"></script> <!-- Categorize images -->
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script> <!-- Fullscreen mode -->
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script> <!-- Buttons & html -->
+    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script> <!-- DataPipe -->
+    <script src="https://unpkg.com/@jspsych/plugin-browser-check@2.1.0"></script> <!-- Device check -->
+    <script src="https://unpkg.com/@jspsych/plugin-external-html@2.1.0"></script> <!-- External html -->
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script> <!-- Text & keyboard responses -->
+
+    <!-- Custom files -->
+    <script src="src/config.js"></script> <!-- high-level variables -->
+    <script src="src/instructions.js"></script> <!-- instructions -->
+    <script src="src/utils.js"></script> <!-- functions -->
+
+    <!-- CSS -->
+    <link href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+    
+    <style>
+        /*Make buttons prettier*/
+        .jspsych-btn {
+            margin-top: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+            padding: 10px 18px;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        /* Change button color on hover */
+        .jspsych-btn:hover {
+            background-color: #0056b3;
+        }
+        /* Set image size */
+        #jspsych-categorize-image-stimulus {
+            height: var(--img-size);
+            width: auto;
+        }
+    </style>
+
+    <!-- Set image size (now in JS - before we referenced it in CSS) -->
+    <script>
+        document.documentElement.style.setProperty('--img-size', img_size + 'px');
+    </script>
+
+</head>
+<body></body>
+<script>
+
+    // Begin Experiment
+    let jsPsych = initJsPsych({
+        show_progress_bar: true, // show progress bar
+        auto_update_progress_bar: false, // We'll update manually
+        message_progress_bar: '', // We'll set manually
+        case_sensitive_responses: false, // responses are NOT case sensitive
+    });
+
+    // Date
+    const full_date = new Date().toISOString();  // Full date and time
+    const date = full_date.split("T")[0]; // Date only 
+    const time = full_date.split("T")[1].split(".")[0]; // Time (in UTC) only
+    const saved_at = time.replaceAll(":", "-");  // "16:25:32" --> "16-25-32"
+
+    // Save data
+    jsPsych.data.addProperties({
+        full_date: full_date,
+        date: date,
+        time: time
+    });
+
+    // Subject ID
+    // try to get ID from Prolific URL, fall back to random ID if not found
+    const subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID') ?? jsPsych.randomization.randomID(8);
+    const study_id = jsPsych.data.getURLVariable('STUDY_ID');
+    const session_id = jsPsych.data.getURLVariable('SESSION_ID');
+
+    // Save subject info
+    jsPsych.data.addProperties({
+        subject_id: subject_id,
+        study_id: study_id,
+        session_id: session_id
+    });
+
+    // Get condition and study items
+    // Use DataPipe API for balanced data collection
+    async function get_condition() {
+        let condition_num;
+        
+        try { condition_num = await jsPsychPipe.getCondition("wfrbkgp69rgz");} 
+        catch (error) { console.warn("DataPipe condition assignment failed:", error); }
+
+        // Fallback if DataPipe returns undefined or fails
+        if (condition_num === undefined || condition_num === null) {
+            console.warn("Falling back to random condition assignment");
+            condition_num = Math.floor(Math.random() * 3);
+        }
+
+        const condition = ["low", "high-sub-prototype", "high-random"][condition_num];
+
+        let train_image_id = [];
+
+        if (condition === "low") {
+            train_image_id = [4, 6, 16, 33, 35, 37, 52, 56, 71, 80, 353, 356, 387, 396, 408, 409, 411, 424, 465, 471];
+        } else if (condition === "high-sub-prototype") {
+            train_image_id = [6, 17, 48, 56, 66, 84, 97, 119, 131, 149, 330, 348, 353, 372, 396, 411, 432, 448, 460, 469];
+        } else if (condition === "high-random") {
+            for (let i_sub_cat = 1; i_sub_cat <= n_unique_study_img; i_sub_cat++) {
+                const rand_sub_cat_item = jsPsych.randomization.sampleWithoutReplacement(
+                    [...Array(total_items_per_cat).keys()].map(x => x + 1), 1)[0];
+                if (i_sub_cat <= study_img_per_cat) {
+                    train_image_id.push(total_items_per_cat * (i_sub_cat - 1) + rand_sub_cat_item);
+                } else {
+                    train_image_id.push(total_items_per_cat * (i_sub_cat - 1) + cat_2_offset + rand_sub_cat_item);
+                }
+            }
+        }
+
+        // Save condition info
+        jsPsych.data.addProperties({ condition: condition });
+
+        return { condition, train_image_id }; // return both so runTrials can use them
+    }
+
+    // Function to run trials
+    async function runTrials() {
+        // Condition
+        const { condition, train_image_id } = await get_condition();
+
+        // Read CSV
+        const response = await fetch(stim_table_file);
+        const csvText = await response.text();
+
+        // Parse CSV into array of objects
+        const all_rows = csvText.trim().split('\n').map(row => row.split(','));
+        const headers = all_rows[0];
+        const all_stim_table = all_rows.slice(1).map(row => {
+            let obj = {};
+            headers.forEach((header, i) => obj[header.trim()] = row[i].trim());
+            return obj;
+        });
+
+        // Filter study images
+        const study_table = all_stim_table.filter(row =>
+            train_image_id.includes(parseInt(row.image_id))
+        );
+        study_table.forEach(row => row.full_path = `${img_folder}${row.filename}`); // add full path to img
+
+        // Test images
+        const test_table = all_stim_table.map(row => ({
+            ...row,
+            full_path: `${img_folder}${row.filename}` // add full path to img
+        }));
+
+
+        // Preload img
+        preload = {
+            type: jsPsychPreload,
+            images: test_table.map(row => row.full_path), // preload all images (study + test)
+            message: `<p style="font-size:${instructions_font_size}px;">Experiment is loading...</p>`,
+            on_start: function() {
+                var progressBar = document.querySelector('#jspsych-progressbar-container');
+                if (progressBar) progressBar.style.display = 'none';
+            },
+        };
+
+        // Study phase
+        const study_trial = {
+            type: jsPsychCategorizeImage,
+            stimulus: jsPsych.timelineVariable('full_path'),
+            key_answer: jsPsych.timelineVariable('category'),
+            choices: ['I', 'S'],
+            correct_text: `<p class='prompt'; style="color:green; font-size:${caption_font_size}px">Correct!</p>`,
+            incorrect_text: function() {
+                const cat = jsPsych.evaluateTimelineVariable('category');
+                const full_name = cat === 'I' ? 'Igneous' : 'Sedimentary';
+                return `<p class='prompt' style="color:red; font-size:${caption_font_size}px">Wrong! It is <b>${full_name}</b></p>`;
+            },
+            show_stim_with_feedback: true,
+            trial_duration: null,
+            feedback_duration: feedback_dur,
+            prompt: `<p style="font-size:${caption_font_size}px">
+                        <b>(S)</b>edimentary or <b>(I)</b>gneous?
+                    </p>`,
+            post_trial_gap: isi,
+            data: {
+                task: 'study',
+                image_id: jsPsych.timelineVariable('image_id'),
+                filename: jsPsych.timelineVariable('filename'),
+                category: jsPsych.timelineVariable('category'),
+                sub_category: jsPsych.timelineVariable('sub_category'),
+                sub_cat_item: jsPsych.timelineVariable('sub_cat_item'),
+            },
+            on_finish: function(data) {
+                const trials_done = jsPsych.data.get().filter({task: 'study'}).count();
+                const progress = trials_done / total_study_img;
+                updateProgressBar(progress, 'Study Phase');
+            }
+        };
+
+
+        const study_block = {
+            timeline: [study_trial,fast_warning,slow_warning],
+            timeline_variables: study_table,
+            randomize_order: true, // randomize order within a block
+        };
+
+        // repeat block multiple times
+        const study_phase = {
+            timeline: Array(n_study_blocks).fill(study_block),
+            on_timeline_start: function() {
+                document.body.style.cursor = 'none';
+                setTimeout(() => updateProgressBar(0, 'Study Phase'), 100);
+            },
+            on_timeline_finish: function() {
+                document.body.style.cursor = 'default';
+            }
+        };
+
+        // Test phase
+        const test_trial = {
+            type: jsPsychCategorizeImage,
+            stimulus: jsPsych.timelineVariable('full_path'),
+            stimulus_height: img_size,
+            key_answer: jsPsych.timelineVariable('category'),
+            choices: ['I', 'S'],
+            correct_text: '', // no feedback
+            incorrect_text: '', // no feedback
+            feedback_duration: 0,
+            trial_duration: null,
+            prompt: `<p style="font-size:${caption_font_size}px">
+                        <b>(S)</b>edimentary or <b>(I)</b>gneous?
+                    </p>`,
+            post_trial_gap: isi,
+            data: {
+                task: 'test',
+                image_id: jsPsych.timelineVariable('image_id'),
+                filename: jsPsych.timelineVariable('filename'),
+                category: jsPsych.timelineVariable('category'),
+                sub_category: jsPsych.timelineVariable('sub_category'),
+                sub_cat_item: jsPsych.timelineVariable('sub_cat_item'),
+            },
+            on_finish: function(data) {
+                const trials_done = jsPsych.data.get().filter({task: 'test'}).count();
+                const progress = trials_done / test_table.length;
+                updateProgressBar(progress, 'Test Phase');
+            }
+        };
+
+        const test_phase = {
+            timeline: [test_trial, fast_warning, slow_warning],
+            timeline_variables: test_table,
+            randomize_order: true,
+            on_timeline_start: function() {
+                document.body.style.cursor = 'none';
+                setTimeout(() => updateProgressBar(0, 'Test Phase'), 100);
+            },
+            on_timeline_finish: function() {
+                document.body.style.cursor = 'default';
+            }
+        };
+
+
+        // Save data
+        // Filename format example: low_88301_2025-11-06_16-13-26.json
+        const saved_filename = `${condition}_${subject_id}_${date}_${saved_at}.json`;
+        const save_data = {
+            type: jsPsychPipe,
+            action: "save",
+            experiment_id: "wfrbkgp69rgz",
+            filename: saved_filename,
+            data_string: ()=>jsPsych.data.get().json(),
+            on_start: function() {
+                // Hide progress bar
+                 var progressBar = document.querySelector('#jspsych-progressbar-container');
+                 if (progressBar) { progressBar.style.display = 'none'; }
+             }
+        };
+
+        // Build and run timeline
+        let timeline = [];
+        timeline.push(
+            device_check,  
+            consentTrial,
+            enter_fullscreen, 
+            preload,
+            instructions,
+            study_phase,
+            between_phases,
+            test_phase,
+            save_data,
+            exit_fullscreen,
+            debrief
+        );
+        jsPsych.run(timeline);
+    }
+
+    runTrials(); // Run experiment
+
+</script>
+</html>

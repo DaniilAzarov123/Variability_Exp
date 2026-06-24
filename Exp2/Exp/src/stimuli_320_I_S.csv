@@ -1,0 +1,321 @@
+image_id,category,sub_category,sub_cat_item,filename
+1,I,Andesite,1,I_Andesite_01.png
+2,I,Andesite,2,I_Andesite_02.png
+3,I,Andesite,3,I_Andesite_03.png
+4,I,Andesite,4,I_Andesite_04.png
+5,I,Andesite,5,I_Andesite_05.png
+6,I,Andesite,6,I_Andesite_06.png
+7,I,Andesite,7,I_Andesite_07.png
+8,I,Andesite,8,I_Andesite_08.png
+9,I,Andesite,9,I_Andesite_09.png
+10,I,Andesite,10,I_Andesite_10.png
+11,I,Andesite,11,I_Andesite_11.png
+12,I,Andesite,12,I_Andesite_12.png
+13,I,Andesite,13,I_Andesite_13.png
+14,I,Andesite,14,I_Andesite_14.png
+15,I,Andesite,15,I_Andesite_15.png
+16,I,Andesite,16,I_Andesite_16.png
+17,I,Basalt,1,I_Basalt_01.png
+18,I,Basalt,2,I_Basalt_02.png
+19,I,Basalt,3,I_Basalt_03.png
+20,I,Basalt,4,I_Basalt_04.png
+21,I,Basalt,5,I_Basalt_05.png
+22,I,Basalt,6,I_Basalt_06.png
+23,I,Basalt,7,I_Basalt_07.png
+24,I,Basalt,8,I_Basalt_08.png
+25,I,Basalt,9,I_Basalt_09.png
+26,I,Basalt,10,I_Basalt_10.png
+27,I,Basalt,11,I_Basalt_11.png
+28,I,Basalt,12,I_Basalt_12.png
+29,I,Basalt,13,I_Basalt_13.png
+30,I,Basalt,14,I_Basalt_14.png
+31,I,Basalt,15,I_Basalt_15.png
+32,I,Basalt,16,I_Basalt_16.png
+33,I,Diorite,1,I_Diorite_01.png
+34,I,Diorite,2,I_Diorite_02.png
+35,I,Diorite,3,I_Diorite_03.png
+36,I,Diorite,4,I_Diorite_04.png
+37,I,Diorite,5,I_Diorite_05.png
+38,I,Diorite,6,I_Diorite_06.png
+39,I,Diorite,7,I_Diorite_07.png
+40,I,Diorite,8,I_Diorite_08.png
+41,I,Diorite,9,I_Diorite_09.png
+42,I,Diorite,10,I_Diorite_10.png
+43,I,Diorite,11,I_Diorite_11.png
+44,I,Diorite,12,I_Diorite_12.png
+45,I,Diorite,13,I_Diorite_13.png
+46,I,Diorite,14,I_Diorite_14.png
+47,I,Diorite,15,I_Diorite_15.png
+48,I,Diorite,16,I_Diorite_16.png
+49,I,Gabbro,1,I_Gabbro_01.png
+50,I,Gabbro,2,I_Gabbro_02.png
+51,I,Gabbro,3,I_Gabbro_03.png
+52,I,Gabbro,4,I_Gabbro_04.png
+53,I,Gabbro,5,I_Gabbro_05.png
+54,I,Gabbro,6,I_Gabbro_06.png
+55,I,Gabbro,7,I_Gabbro_07.png
+56,I,Gabbro,8,I_Gabbro_08.png
+57,I,Gabbro,9,I_Gabbro_09.png
+58,I,Gabbro,10,I_Gabbro_10.png
+59,I,Gabbro,11,I_Gabbro_11.png
+60,I,Gabbro,12,I_Gabbro_12.png
+61,I,Gabbro,13,I_Gabbro_13.png
+62,I,Gabbro,14,I_Gabbro_14.png
+63,I,Gabbro,15,I_Gabbro_15.png
+64,I,Gabbro,16,I_Gabbro_16.png
+65,I,Granite,1,I_Granite_01.png
+66,I,Granite,2,I_Granite_02.png
+67,I,Granite,3,I_Granite_03.png
+68,I,Granite,4,I_Granite_04.png
+69,I,Granite,5,I_Granite_05.png
+70,I,Granite,6,I_Granite_06.png
+71,I,Granite,7,I_Granite_07.png
+72,I,Granite,8,I_Granite_08.png
+73,I,Granite,9,I_Granite_09.png
+74,I,Granite,10,I_Granite_10.png
+75,I,Granite,11,I_Granite_11.png
+76,I,Granite,12,I_Granite_12.png
+77,I,Granite,13,I_Granite_13.png
+78,I,Granite,14,I_Granite_14.png
+79,I,Granite,15,I_Granite_15.png
+80,I,Granite,16,I_Granite_16.png
+81,I,Obsidian,1,I_Obsidian_01.png
+82,I,Obsidian,2,I_Obsidian_02.png
+83,I,Obsidian,3,I_Obsidian_03.png
+84,I,Obsidian,4,I_Obsidian_04.png
+85,I,Obsidian,5,I_Obsidian_05.png
+86,I,Obsidian,6,I_Obsidian_06.png
+87,I,Obsidian,7,I_Obsidian_07.png
+88,I,Obsidian,8,I_Obsidian_08.png
+89,I,Obsidian,9,I_Obsidian_09.png
+90,I,Obsidian,10,I_Obsidian_10.png
+91,I,Obsidian,11,I_Obsidian_11.png
+92,I,Obsidian,12,I_Obsidian_12.png
+93,I,Obsidian,13,I_Obsidian_13.png
+94,I,Obsidian,14,I_Obsidian_14.png
+95,I,Obsidian,15,I_Obsidian_15.png
+96,I,Obsidian,16,I_Obsidian_16.png
+97,I,Pegmatite,1,I_Pegmatite_01.png
+98,I,Pegmatite,2,I_Pegmatite_02.png
+99,I,Pegmatite,3,I_Pegmatite_03.png
+100,I,Pegmatite,4,I_Pegmatite_04.png
+101,I,Pegmatite,5,I_Pegmatite_05.png
+102,I,Pegmatite,6,I_Pegmatite_06.png
+103,I,Pegmatite,7,I_Pegmatite_07.png
+104,I,Pegmatite,8,I_Pegmatite_08.png
+105,I,Pegmatite,9,I_Pegmatite_09.png
+106,I,Pegmatite,10,I_Pegmatite_10.png
+107,I,Pegmatite,11,I_Pegmatite_11.png
+108,I,Pegmatite,12,I_Pegmatite_12.png
+109,I,Pegmatite,13,I_Pegmatite_13.png
+110,I,Pegmatite,14,I_Pegmatite_14.png
+111,I,Pegmatite,15,I_Pegmatite_15.png
+112,I,Pegmatite,16,I_Pegmatite_16.png
+113,I,Peridotite,1,I_Peridotite_01.png
+114,I,Peridotite,2,I_Peridotite_02.png
+115,I,Peridotite,3,I_Peridotite_03.png
+116,I,Peridotite,4,I_Peridotite_04.png
+117,I,Peridotite,5,I_Peridotite_05.png
+118,I,Peridotite,6,I_Peridotite_06.png
+119,I,Peridotite,7,I_Peridotite_07.png
+120,I,Peridotite,8,I_Peridotite_08.png
+121,I,Peridotite,9,I_Peridotite_09.png
+122,I,Peridotite,10,I_Peridotite_10.png
+123,I,Peridotite,11,I_Peridotite_11.png
+124,I,Peridotite,12,I_Peridotite_12.png
+125,I,Peridotite,13,I_Peridotite_13.png
+126,I,Peridotite,14,I_Peridotite_14.png
+127,I,Peridotite,15,I_Peridotite_15.png
+128,I,Peridotite,16,I_Peridotite_16.png
+129,I,Pumice,1,I_Pumice_01.png
+130,I,Pumice,2,I_Pumice_02.png
+131,I,Pumice,3,I_Pumice_03.png
+132,I,Pumice,4,I_Pumice_04.png
+133,I,Pumice,5,I_Pumice_05.png
+134,I,Pumice,6,I_Pumice_06.png
+135,I,Pumice,7,I_Pumice_07.png
+136,I,Pumice,8,I_Pumice_08.png
+137,I,Pumice,9,I_Pumice_09.png
+138,I,Pumice,10,I_Pumice_10.png
+139,I,Pumice,11,I_Pumice_11.png
+140,I,Pumice,12,I_Pumice_12.png
+141,I,Pumice,13,I_Pumice_13.png
+142,I,Pumice,14,I_Pumice_14.png
+143,I,Pumice,15,I_Pumice_15.png
+144,I,Pumice,16,I_Pumice_16.png
+145,I,Rhyolite,1,I_Rhyolite_01.png
+146,I,Rhyolite,2,I_Rhyolite_02.png
+147,I,Rhyolite,3,I_Rhyolite_03.png
+148,I,Rhyolite,4,I_Rhyolite_04.png
+149,I,Rhyolite,5,I_Rhyolite_05.png
+150,I,Rhyolite,6,I_Rhyolite_06.png
+151,I,Rhyolite,7,I_Rhyolite_07.png
+152,I,Rhyolite,8,I_Rhyolite_08.png
+153,I,Rhyolite,9,I_Rhyolite_09.png
+154,I,Rhyolite,10,I_Rhyolite_10.png
+155,I,Rhyolite,11,I_Rhyolite_11.png
+156,I,Rhyolite,12,I_Rhyolite_12.png
+157,I,Rhyolite,13,I_Rhyolite_13.png
+158,I,Rhyolite,14,I_Rhyolite_14.png
+159,I,Rhyolite,15,I_Rhyolite_15.png
+160,I,Rhyolite,16,I_Rhyolite_16.png
+321,S,Bituminous Coal,1,S_Bituminous Coal_01.png
+322,S,Bituminous Coal,2,S_Bituminous Coal_02.png
+323,S,Bituminous Coal,3,S_Bituminous Coal_03.png
+324,S,Bituminous Coal,4,S_Bituminous Coal_04.png
+325,S,Bituminous Coal,5,S_Bituminous Coal_05.png
+326,S,Bituminous Coal,6,S_Bituminous Coal_06.png
+327,S,Bituminous Coal,7,S_Bituminous Coal_07.png
+328,S,Bituminous Coal,8,S_Bituminous Coal_08.png
+329,S,Bituminous Coal,9,S_Bituminous Coal_09.png
+330,S,Bituminous Coal,10,S_Bituminous Coal_10.png
+331,S,Bituminous Coal,11,S_Bituminous Coal_11.png
+332,S,Bituminous Coal,12,S_Bituminous Coal_12.png
+333,S,Bituminous Coal,13,S_Bituminous Coal_13.png
+334,S,Bituminous Coal,14,S_Bituminous Coal_14.png
+335,S,Bituminous Coal,15,S_Bituminous Coal_15.png
+336,S,Bituminous Coal,16,S_Bituminous Coal_16.png
+337,S,Breccia,1,S_Breccia_01.png
+338,S,Breccia,2,S_Breccia_02.png
+339,S,Breccia,3,S_Breccia_03.png
+340,S,Breccia,4,S_Breccia_04.png
+341,S,Breccia,5,S_Breccia_05.png
+342,S,Breccia,6,S_Breccia_06.png
+343,S,Breccia,7,S_Breccia_07.png
+344,S,Breccia,8,S_Breccia_08.png
+345,S,Breccia,9,S_Breccia_09.png
+346,S,Breccia,10,S_Breccia_10.png
+347,S,Breccia,11,S_Breccia_11.png
+348,S,Breccia,12,S_Breccia_12.png
+349,S,Breccia,13,S_Breccia_13.png
+350,S,Breccia,14,S_Breccia_14.png
+351,S,Breccia,15,S_Breccia_15.png
+352,S,Breccia,16,S_Breccia_16.png
+353,S,Chert,1,S_Chert_01.png
+354,S,Chert,2,S_Chert_02.png
+355,S,Chert,3,S_Chert_03.png
+356,S,Chert,4,S_Chert_04.png
+357,S,Chert,5,S_Chert_05.png
+358,S,Chert,6,S_Chert_06.png
+359,S,Chert,7,S_Chert_07.png
+360,S,Chert,8,S_Chert_08.png
+361,S,Chert,9,S_Chert_09.png
+362,S,Chert,10,S_Chert_10.png
+363,S,Chert,11,S_Chert_11.png
+364,S,Chert,12,S_Chert_12.png
+365,S,Chert,13,S_Chert_13.png
+366,S,Chert,14,S_Chert_14.png
+367,S,Chert,15,S_Chert_15.png
+368,S,Chert,16,S_Chert_16.png
+369,S,Conglomerate,1,S_Conglomerate_01.png
+370,S,Conglomerate,2,S_Conglomerate_02.png
+371,S,Conglomerate,3,S_Conglomerate_03.png
+372,S,Conglomerate,4,S_Conglomerate_04.png
+373,S,Conglomerate,5,S_Conglomerate_05.png
+374,S,Conglomerate,6,S_Conglomerate_06.png
+375,S,Conglomerate,7,S_Conglomerate_07.png
+376,S,Conglomerate,8,S_Conglomerate_08.png
+377,S,Conglomerate,9,S_Conglomerate_09.png
+378,S,Conglomerate,10,S_Conglomerate_10.png
+379,S,Conglomerate,11,S_Conglomerate_11.png
+380,S,Conglomerate,12,S_Conglomerate_12.png
+381,S,Conglomerate,13,S_Conglomerate_13.png
+382,S,Conglomerate,14,S_Conglomerate_14.png
+383,S,Conglomerate,15,S_Conglomerate_15.png
+384,S,Conglomerate,16,S_Conglomerate_16.png
+385,S,Dolomite,1,S_Dolomite_01.png
+386,S,Dolomite,2,S_Dolomite_02.png
+387,S,Dolomite,3,S_Dolomite_03.png
+388,S,Dolomite,4,S_Dolomite_04.png
+389,S,Dolomite,5,S_Dolomite_05.png
+390,S,Dolomite,6,S_Dolomite_06.png
+391,S,Dolomite,7,S_Dolomite_07.png
+392,S,Dolomite,8,S_Dolomite_08.png
+393,S,Dolomite,9,S_Dolomite_09.png
+394,S,Dolomite,10,S_Dolomite_10.png
+395,S,Dolomite,11,S_Dolomite_11.png
+396,S,Dolomite,12,S_Dolomite_12.png
+397,S,Dolomite,13,S_Dolomite_13.png
+398,S,Dolomite,14,S_Dolomite_14.png
+399,S,Dolomite,15,S_Dolomite_15.png
+400,S,Dolomite,16,S_Dolomite_16.png
+401,S,Micrite,1,S_Micrite_01.png
+402,S,Micrite,2,S_Micrite_02.png
+403,S,Micrite,3,S_Micrite_03.png
+404,S,Micrite,4,S_Micrite_04.png
+405,S,Micrite,5,S_Micrite_05.png
+406,S,Micrite,6,S_Micrite_06.png
+407,S,Micrite,7,S_Micrite_07.png
+408,S,Micrite,8,S_Micrite_08.png
+409,S,Micrite,9,S_Micrite_09.png
+410,S,Micrite,10,S_Micrite_10.png
+411,S,Micrite,11,S_Micrite_11.png
+412,S,Micrite,12,S_Micrite_12.png
+413,S,Micrite,13,S_Micrite_13.png
+414,S,Micrite,14,S_Micrite_14.png
+415,S,Micrite,15,S_Micrite_15.png
+416,S,Micrite,16,S_Micrite_16.png
+417,S,Rock Gypsum,1,S_Rock Gypsum_01.png
+418,S,Rock Gypsum,2,S_Rock Gypsum_02.png
+419,S,Rock Gypsum,3,S_Rock Gypsum_03.png
+420,S,Rock Gypsum,4,S_Rock Gypsum_04.png
+421,S,Rock Gypsum,5,S_Rock Gypsum_05.png
+422,S,Rock Gypsum,6,S_Rock Gypsum_06.png
+423,S,Rock Gypsum,7,S_Rock Gypsum_07.png
+424,S,Rock Gypsum,8,S_Rock Gypsum_08.png
+425,S,Rock Gypsum,9,S_Rock Gypsum_09.png
+426,S,Rock Gypsum,10,S_Rock Gypsum_10.png
+427,S,Rock Gypsum,11,S_Rock Gypsum_11.png
+428,S,Rock Gypsum,12,S_Rock Gypsum_12.png
+429,S,Rock Gypsum,13,S_Rock Gypsum_13.png
+430,S,Rock Gypsum,14,S_Rock Gypsum_14.png
+431,S,Rock Gypsum,15,S_Rock Gypsum_15.png
+432,S,Rock Gypsum,16,S_Rock Gypsum_16.png
+433,S,Rock Salt,1,S_Rock Salt_01.png
+434,S,Rock Salt,2,S_Rock Salt_02.png
+435,S,Rock Salt,3,S_Rock Salt_03.png
+436,S,Rock Salt,4,S_Rock Salt_04.png
+437,S,Rock Salt,5,S_Rock Salt_05.png
+438,S,Rock Salt,6,S_Rock Salt_06.png
+439,S,Rock Salt,7,S_Rock Salt_07.png
+440,S,Rock Salt,8,S_Rock Salt_08.png
+441,S,Rock Salt,9,S_Rock Salt_09.png
+442,S,Rock Salt,10,S_Rock Salt_10.png
+443,S,Rock Salt,11,S_Rock Salt_11.png
+444,S,Rock Salt,12,S_Rock Salt_12.png
+445,S,Rock Salt,13,S_Rock Salt_13.png
+446,S,Rock Salt,14,S_Rock Salt_14.png
+447,S,Rock Salt,15,S_Rock Salt_15.png
+448,S,Rock Salt,16,S_Rock Salt_16.png
+449,S,Sandstone,1,S_Sandstone_01.png
+450,S,Sandstone,2,S_Sandstone_02.png
+451,S,Sandstone,3,S_Sandstone_03.png
+452,S,Sandstone,4,S_Sandstone_04.png
+453,S,Sandstone,5,S_Sandstone_05.png
+454,S,Sandstone,6,S_Sandstone_06.png
+455,S,Sandstone,7,S_Sandstone_07.png
+456,S,Sandstone,8,S_Sandstone_08.png
+457,S,Sandstone,9,S_Sandstone_09.png
+458,S,Sandstone,10,S_Sandstone_10.png
+459,S,Sandstone,11,S_Sandstone_11.png
+460,S,Sandstone,12,S_Sandstone_12.png
+461,S,Sandstone,13,S_Sandstone_13.png
+462,S,Sandstone,14,S_Sandstone_14.png
+463,S,Sandstone,15,S_Sandstone_15.png
+464,S,Sandstone,16,S_Sandstone_16.png
+465,S,Shale,1,S_Shale_01.png
+466,S,Shale,2,S_Shale_02.png
+467,S,Shale,3,S_Shale_03.png
+468,S,Shale,4,S_Shale_04.png
+469,S,Shale,5,S_Shale_05.png
+470,S,Shale,6,S_Shale_06.png
+471,S,Shale,7,S_Shale_07.png
+472,S,Shale,8,S_Shale_08.png
+473,S,Shale,9,S_Shale_09.png
+474,S,Shale,10,S_Shale_10.png
+475,S,Shale,11,S_Shale_11.png
+476,S,Shale,12,S_Shale_12.png
+477,S,Shale,13,S_Shale_13.png
+478,S,Shale,14,S_Shale_14.png
+479,S,Shale,15,S_Shale_15.png
+480,S,Shale,16,S_Shale_16.png

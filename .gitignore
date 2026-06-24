@@ -1,0 +1,18 @@
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.env
+.vscode/
+
+# OS files
+.DS_Store
+
+# .pkl 
+*.pkl
+
+
