@@ -6,6 +6,12 @@ const img_folder = 'https://raw.githubusercontent.com/DaniilAzarov123/Rocks_Data
 const consent_file = source_folder + 'consent.html';
 const stim_table_file = source_folder + 'stimuli_320_I_S.csv'
 
+// Date
+const full_date = new Date().toISOString();  // Full date and time
+const date = full_date.split("T")[0]; // Date only 
+const time = full_date.split("T")[1].split(".")[0]; // Time (in UTC) only
+const saved_at = time.replaceAll(":", "-");  // "16:25:32" --> "16-25-32"
+
 
 // Display
 const img_size = 300; // image size (px)

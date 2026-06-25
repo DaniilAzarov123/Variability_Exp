@@ -68,13 +68,7 @@
         case_sensitive_responses: false, // responses are NOT case sensitive
     });
 
-    // Date
-    const full_date = new Date().toISOString();  // Full date and time
-    const date = full_date.split("T")[0]; // Date only 
-    const time = full_date.split("T")[1].split(".")[0]; // Time (in UTC) only
-    const saved_at = time.replaceAll(":", "-");  // "16:25:32" --> "16-25-32"
-
-    // Save data
+    // Save date
     jsPsych.data.addProperties({
         full_date: full_date,
         date: date,
@@ -113,9 +107,13 @@
         let train_image_id = [];
 
         if (condition === "low") {
-            train_image_id = [4, 6, 16, 33, 35, 37, 52, 56, 71, 80, 353, 356, 387, 396, 408, 409, 411, 424, 465, 471];
+            train_image_id = [4, 6, 16, 33, 35, 37, 52, 56, 71, 80,
+                             353, 356, 387, 396, 408, 409, 411, 424, 465, 471];
+
         } else if (condition === "high-sub-prototype") {
-            train_image_id = [6, 17, 48, 56, 66, 84, 97, 119, 131, 149, 330, 348, 353, 372, 396, 411, 432, 448, 460, 469];
+            train_image_id = [6, 17, 48, 56, 66, 84, 97, 119, 131, 149,
+                             330, 348, 353, 372, 396, 411, 432, 448, 460, 469];
+                             
         } else if (condition === "high-random") {
             for (let i_sub_cat = 1; i_sub_cat <= n_unique_study_img; i_sub_cat++) {
                 const rand_sub_cat_item = jsPsych.randomization.sampleWithoutReplacement(
