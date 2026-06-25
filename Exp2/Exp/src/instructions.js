@@ -84,7 +84,7 @@ let between_phases = {
           <span><b>I</b> - Igneous</span>
         </div>
       <p>
-        In this test phase, <b>feedback will NOT be provided</b>.
+        In the test phase, <b>feedback will NOT be provided</b>.
         You may find it very challenging to classify many of the new rocks.
         Please try to the best of your ability.
       </p>
@@ -131,11 +131,11 @@ let debrief = {
         <b>Important</b>: Please do not run the experiment again.
       </p>
       <p>
-        In this study, we investigated the most effective ways to learn new categories (concepts). 
-        Specifically, we examined whether it is better to learn items that are most <b>similar</b> to the 
+        In this study, we are investigating the most effective ways to learn new categories (concepts). 
+        Specifically, we are examining whether it is better to learn items that are most <b>similar</b> to the 
         category&apos;s average representative (i.e., the most typical examples) 
         <b>or</b> to learn a more <b>diverse</b> set of category members. 
-        We were also interested in determining which learning strategy leads to better generalization to new category members.
+        We are also interested in determining which learning strategy leads to better generalization to new category members.
         Your data will allow us to better understand category learning mechanisms of the human mind.
       </p>
       <p>

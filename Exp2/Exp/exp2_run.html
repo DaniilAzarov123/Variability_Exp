@@ -83,9 +83,9 @@
 
     // Subject ID
     // try to get ID from Prolific URL, fall back to random ID if not found
-    const subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID') ?? jsPsych.randomization.randomID(8);
-    const study_id = jsPsych.data.getURLVariable('STUDY_ID');
-    const session_id = jsPsych.data.getURLVariable('SESSION_ID');
+    const subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID') ?? 'random_' + jsPsych.randomization.randomID(8);
+    const study_id = jsPsych.data.getURLVariable('STUDY_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
+    const session_id = jsPsych.data.getURLVariable('SESSION_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
 
     // Save subject info
     jsPsych.data.addProperties({
