@@ -154,12 +154,16 @@
         const study_table = all_stim_table.filter(row =>
             train_image_id.includes(parseInt(row.image_id))
         );
-        study_table.forEach(row => row.full_path = `${img_folder}${row.filename}`); // add full path to img
+        study_table.forEach(row => {
+            row.full_path = `${img_folder}${row.filename}`; // add full path to img
+            row.object_type = 'study'; // Always a study object
+        });
 
         // Test images
         const test_table = all_stim_table.map(row => ({
             ...row,
-            full_path: `${img_folder}${row.filename}` // add full path to img
+            full_path: `${img_folder}${row.filename}`, // add full path to img
+            object_type: train_image_id.includes(parseInt(row.image_id)) ? 'study' : 'novel' // Study or Novel object
         }));
 
 
@@ -200,6 +204,7 @@
                 category: jsPsych.timelineVariable('category'),
                 sub_category: jsPsych.timelineVariable('sub_category'),
                 sub_cat_item: jsPsych.timelineVariable('sub_cat_item'),
+                object_type: jsPsych.timelineVariable('object_type'),
             },
             on_finish: function(data) {
                 const trials_done = jsPsych.data.get().filter({task: 'study'}).count();
@@ -249,6 +254,7 @@
                 category: jsPsych.timelineVariable('category'),
                 sub_category: jsPsych.timelineVariable('sub_category'),
                 sub_cat_item: jsPsych.timelineVariable('sub_cat_item'),
+                object_type: jsPsych.timelineVariable('object_type'),
             },
             on_finish: function(data) {
                 const trials_done = jsPsych.data.get().filter({task: 'test'}).count();

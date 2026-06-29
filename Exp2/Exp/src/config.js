@@ -29,7 +29,7 @@ const cat_2_offset = 160; // smallest image_id for the second category
 const n_unique_study_img = n_cat * study_img_per_cat; // n of unique study images
 const total_study_img = n_study_blocks * n_unique_study_img; // total number of study images
 
-const feedback_dur = 1000;
+const feedback_dur = 2000;
 
 // Timing
 const isi = 500; // inter-stimulus interval
