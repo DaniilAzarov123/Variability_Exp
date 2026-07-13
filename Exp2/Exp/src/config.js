@@ -5,6 +5,7 @@ const source_folder = 'src/';
 const img_folder = 'https://raw.githubusercontent.com/DaniilAzarov123/Rocks_Database/main/Rocks480/'; // rock database
 const consent_file = source_folder + 'consent.html';
 const stim_table_file = source_folder + 'stimuli_320_I_S.csv'
+const DataPipe_Exp_ID = 'wfrbkgp69rgz'; // DataPipe experiment ID
 
 // Date
 const full_date = new Date().toISOString();  // Full date and time
@@ -29,10 +30,10 @@ const cat_2_offset = 160; // smallest image_id for the second category
 const n_unique_study_img = n_cat * study_img_per_cat; // n of unique study images
 const total_study_img = n_study_blocks * n_unique_study_img; // total number of study images
 
-const feedback_dur = 2000;
+const feedback_dur = 3000;
 
 // Timing
 const isi = 500; // inter-stimulus interval
-const warn_slow_resp = 7000; // warn participants if they make very slow responses
+const warn_slow_resp = 10000; // warn participants if they make very slow responses
 const warn_fast_resp = 250; // warn participants if they make very fast responses
 const warn_dur = 4000;

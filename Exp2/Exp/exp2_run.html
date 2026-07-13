@@ -92,14 +92,16 @@
     // Use DataPipe API for balanced data collection
     async function get_condition() {
         let condition_num;
+        let cond_assign_source = "DataPipe"; // default to DataPipe
         
-        try { condition_num = await jsPsychPipe.getCondition("wfrbkgp69rgz");} 
+        try { condition_num = await jsPsychPipe.getCondition(DataPipe_Exp_ID);} 
         catch (error) { console.warn("DataPipe condition assignment failed:", error); }
 
         // Fallback if DataPipe returns undefined or fails
         if (condition_num === undefined || condition_num === null) {
             console.warn("Falling back to random condition assignment");
             condition_num = Math.floor(Math.random() * 3);
+            cond_assign_source = "Random";
         }
 
         const condition = ["low", "high-sub-prototype", "high-random"][condition_num];
@@ -114,20 +116,13 @@
             train_image_id = [6, 17, 48, 56, 66, 84, 97, 119, 131, 149,
                              330, 348, 353, 372, 396, 411, 432, 448, 460, 469];
                              
-        } else if (condition === "high-random") {
-            for (let i_sub_cat = 1; i_sub_cat <= n_unique_study_img; i_sub_cat++) {
-                const rand_sub_cat_item = jsPsych.randomization.sampleWithoutReplacement(
-                    [...Array(total_items_per_cat).keys()].map(x => x + 1), 1)[0];
-                if (i_sub_cat <= study_img_per_cat) {
-                    train_image_id.push(total_items_per_cat * (i_sub_cat - 1) + rand_sub_cat_item);
-                } else {
-                    train_image_id.push(total_items_per_cat * (i_sub_cat - 1) + cat_2_offset + rand_sub_cat_item);
-                }
-            }
         }
 
         // Save condition info
-        jsPsych.data.addProperties({ condition: condition });
+        jsPsych.data.addProperties({ 
+            condition: condition, 
+            cond_assign_source: cond_assign_source 
+        });
 
         return { condition, train_image_id }; // return both so runTrials can use them
     }
@@ -184,7 +179,11 @@
             stimulus: jsPsych.timelineVariable('full_path'),
             key_answer: jsPsych.timelineVariable('category'),
             choices: ['I', 'S'],
-            correct_text: `<p class='prompt'; style="color:green; font-size:${caption_font_size}px">Correct!</p>`,
+            correct_text: function() {
+                const cat = jsPsych.evaluateTimelineVariable('category');
+                const full_name = cat === 'I' ? 'Igneous' : 'Sedimentary';
+                return `<p class='prompt' style="color:green; font-size:${caption_font_size}px">Correct! It is <b>${full_name}</b></p>`;
+            },
             incorrect_text: function() {
                 const cat = jsPsych.evaluateTimelineVariable('category');
                 const full_name = cat === 'I' ? 'Igneous' : 'Sedimentary';
@@ -283,7 +282,7 @@
         const save_data = {
             type: jsPsychPipe,
             action: "save",
-            experiment_id: "wfrbkgp69rgz",
+            experiment_id: DataPipe_Exp_ID,
             filename: saved_filename,
             data_string: ()=>jsPsych.data.get().json(),
             on_start: function() {
