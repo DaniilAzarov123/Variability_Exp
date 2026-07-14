@@ -66,6 +66,9 @@
         auto_update_progress_bar: false, // We'll update manually
         message_progress_bar: '', // We'll set manually
         case_sensitive_responses: false, // responses are NOT case sensitive
+        on_finish: function(){
+            window.location = Prolific_completion_url;
+        }
     });
 
     // Save date

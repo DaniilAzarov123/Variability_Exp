@@ -6,6 +6,7 @@ const img_folder = 'https://raw.githubusercontent.com/DaniilAzarov123/Rocks_Data
 const consent_file = source_folder + 'consent.html';
 const stim_table_file = source_folder + 'stimuli_320_I_S.csv'
 const DataPipe_Exp_ID = 'wfrbkgp69rgz'; // DataPipe experiment ID
+const Prolific_completion_url = "https://app.prolific.com/submissions/complete?cc=CIKR98K7"; // Prolific completion URL
 
 // Date
 const full_date = new Date().toISOString();  // Full date and time
