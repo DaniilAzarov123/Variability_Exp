@@ -67,7 +67,10 @@
         message_progress_bar: '', // We'll set manually
         case_sensitive_responses: false, // responses are NOT case sensitive
         on_finish: function(){
-            window.location = Prolific_completion_url;
+            // redirect for Prolific participants
+            if (recruitment_source === 'prolific') {
+                window.location = prolific_completion_url;
+            }
         }
     });
 
@@ -79,10 +82,28 @@
     });
 
     // Subject ID
-    // try to get ID from Prolific URL, fall back to random ID if not found
-    const subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID') ?? 'random_' + jsPsych.randomization.randomID(8);
-    const study_id = jsPsych.data.getURLVariable('STUDY_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
-    const session_id = jsPsych.data.getURLVariable('SESSION_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
+    // extract ID from URL parameters (Prolific or Sona) or generate random ID
+    const prolific_pid = jsPsych.data.getURLVariable('PROLIFIC_PID');
+    const sona_id = jsPsych.data.getURLVariable('id');
+
+    let recruitment_source, subject_id, study_id, session_id;
+
+    if (prolific_pid) {
+        recruitment_source = 'prolific';
+        subject_id = prolific_pid;
+        study_id = jsPsych.data.getURLVariable('STUDY_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
+        session_id = jsPsych.data.getURLVariable('SESSION_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
+    } else if (sona_id) {
+        recruitment_source = 'sona';
+        subject_id = sona_id;
+        study_id = 'random_' + jsPsych.randomization.randomID(8);
+        session_id = 'random_' + jsPsych.randomization.randomID(8);
+    } else {
+        recruitment_source = 'unknown';
+        subject_id = 'random_' + jsPsych.randomization.randomID(8);
+        study_id = 'random_' + jsPsych.randomization.randomID(8);
+        session_id = 'random_' + jsPsych.randomization.randomID(8);
+    }
 
     // Save subject info
     jsPsych.data.addProperties({
