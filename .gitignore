@@ -12,7 +12,7 @@ venv/
 # OS files
 .DS_Store
 
-# .pkl 
+# pickle files
 *.pkl
 
 
