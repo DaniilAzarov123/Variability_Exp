@@ -1,5 +1,17 @@
 // utils.js
 
+// Generate a random alphanumeric ID of a given length. Doesn't depend on jsPsych,
+// so it can be used before initJsPsych() has run (e.g. for subject/study/session IDs
+// that must be known before the DataPipe extension is initialized).
+function randomID(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+    for (let i = 0; i < length; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+}
+
 // Device check (make sure the participant is using a non-mobile device in fullscreen mode)
 let device_check = {
     type: jsPsychBrowserCheck,
@@ -139,4 +151,114 @@ function updateProgressBar(progress, text) {
       inner_bar.style.backgroundColor = "rgba(76, 175, 80, 0.7)";
     }
   }
+}
+
+// Adaptive study algorithm helpers
+
+// Compute a recency-weighted sampling weight for every stimulus in `stimuli`,
+// based on its history of correct/incorrect responses across all previously
+// completed study blocks.
+//
+// history: array of study-trial data objects (e.g. jsPsych.data.get().filter({task:'study'}).values()),
+//          each with at least { image_id, block, correct }.
+// stimuli: array of stimulus row objects (e.g. study_table), each with { image_id, ... }.
+// completedBlocks: number of blocks fully completed so far (B in the recency-weighting formula).
+// lambda: recency weighting base (w_b = lambda^(B-b)).
+// epsilon: exploration constant (W_i = epsilon + Difficulty_i).
+//
+// Returns: { [image_id]: weight } — plain object keyed by stimulus image_id (as a string).
+function computeSamplingWeights(history, stimuli, completedBlocks, lambda, epsilon) {
+    const weights = {};
+
+    stimuli.forEach(function(stim) {
+        const id = String(stim.image_id);
+
+        // All recorded responses for this stimulus, up to and including the last completed block.
+        const recs = history.filter(function(rec) {
+            return String(rec.image_id) === id && rec.block <= completedBlocks;
+        });
+
+        // Group by block, then average correctness within each block (mean-per-block rule):
+        // a block where the stimulus was repeated up to max_reps_per_block times still
+        // contributes exactly one data point to the recency-weighted accuracy.
+        const byBlock = {};
+        recs.forEach(function(rec) {
+            const b = rec.block;
+            if (!byBlock[b]) byBlock[b] = [];
+            byBlock[b].push(rec.correct ? 1 : 0);
+        });
+
+        let weightedSum = 0;
+        let weightTotal = 0;
+        Object.keys(byBlock).forEach(function(bKey) {
+            const b = parseInt(bKey);
+            const meanCorrect = byBlock[b].reduce(function(a, c) { return a + c; }, 0) / byBlock[b].length;
+            const w_b = Math.pow(lambda, completedBlocks - b);
+            weightedSum += w_b * meanCorrect;
+            weightTotal += w_b;
+        });
+
+        // If a stimulus somehow has no history yet (shouldn't happen past block 1),
+        // default to max difficulty (accuracy = 0) rather than NaN.
+        const accuracy = weightTotal > 0 ? (weightedSum / weightTotal) : 0;
+        const difficulty = 1 - accuracy;
+
+        weights[id] = epsilon + difficulty;
+    });
+
+    return weights;
+}
+
+// Draw `nDraws` items from `items` via weighted sampling with replacement, where each
+// item's weight comes from `weights[String(item.image_id)]`. Once an item has been drawn
+// `maxReps` times, it is removed from the pool for the remainder of this call (its
+// underlying weight is unaffected — it simply becomes unavailable for further draws here).
+//
+// Returns: array of length nDraws, containing references into `items` (duplicates allowed
+// up to maxReps).
+function weightedSampleWithCap(items, weights, nDraws, maxReps) {
+    let pool = items.slice();
+    const counts = {};
+    const result = [];
+
+    for (let draw = 0; draw < nDraws; draw++) {
+        const poolWeights = pool.map(function(item) { return weights[String(item.image_id)]; });
+        const totalWeight = poolWeights.reduce(function(a, w) { return a + w; }, 0);
+
+        let chosenIndex = -1;
+
+        if (pool.length === 0 || !(totalWeight > 0)) {
+            // Safety fallback: pool exhausted or degenerate weights (should not happen
+            // with current constants: 10 items x cap 3 = 30 >= 10 draws per category).
+            // Fall back to a uniform pick from the full item list, ignoring the cap.
+            const fallbackItem = items[Math.floor(Math.random() * items.length)];
+            result.push(fallbackItem);
+            const fid = String(fallbackItem.image_id);
+            counts[fid] = (counts[fid] || 0) + 1;
+            continue;
+        }
+
+        let r = Math.random() * totalWeight;
+        for (let i = 0; i < pool.length; i++) {
+            r -= poolWeights[i];
+            if (r <= 0) {
+                chosenIndex = i;
+                break;
+            }
+        }
+        // Floating-point rounding safety net: if the walk never triggered above,
+        // fall back to the last item in the pool.
+        if (chosenIndex === -1) chosenIndex = pool.length - 1;
+
+        const chosen = pool[chosenIndex];
+        result.push(chosen);
+
+        const cid = String(chosen.image_id);
+        counts[cid] = (counts[cid] || 0) + 1;
+        if (counts[cid] >= maxReps) {
+            pool.splice(chosenIndex, 1);
+        }
+    }
+
+    return result;
 }

@@ -2,10 +2,15 @@
 
 // Source files
 const source_folder = 'src/';
-const img_folder = 'https://raw.githubusercontent.com/DaniilAzarov123/Rocks_Database/main/Rocks480/'; // rock database
+const img_folder = 'https://cdn.jsdelivr.net/gh/DaniilAzarov123/Rocks_Database@main/Rocks480/'; // rock database (jsDelivr CDN, not raw.githubusercontent.com — see comment below)
+// raw.githubusercontent.com is not meant for serving website assets and rate-limits/throttles
+// bursts of many simultaneous requests (like preloading 300+ images at once), which showed up
+// as ERR_HTTP2_PROTOCOL_ERROR in testing. jsDelivr proxies the same GitHub repo but is built
+// for exactly this kind of asset delivery.
 const consent_file = source_folder + 'consent.html';
-const stim_table_file = source_folder + 'stimuli_320_I_S.csv'
-const DataPipe_Exp_ID = 'wfrbkgp69rgz'; // DataPipe experiment ID
+const debrief_file = source_folder + 'debrief.html'; // shown via the pipe extension's done_message once data is submitted
+const stim_table_file = source_folder + 'testScript_stimuli_320_I_S.csv'; //'stimuli_320_I_S.csv';
+const DataPipe_Exp_ID = 'liXj1j5gdAap'; // DataPipe experiment ID
 const Prolific_completion_url = "https://app.prolific.com/submissions/complete?cc=CIKR98K7"; // Prolific completion URL
 
 // Date
@@ -24,12 +29,14 @@ const text_max_width = 760; // max width of the text on the screen
 // Experiment structure
 const n_study_blocks = 8; // n repetitions of each object
 const study_img_per_cat = 10; // how many study images come from each category?
-const total_items_per_cat = 16; // how many images are there per category total (in data base)?
 const n_cat = 2; // number of categories to be tested
-const cat_2_offset = 160; // smallest image_id for the second category 
-                            // (if there are 3 categories - need offset for cat 3, too)
 const n_unique_study_img = n_cat * study_img_per_cat; // n of unique study images
 const total_study_img = n_study_blocks * n_unique_study_img; // total number of study images
+
+// Adaptive study algorithm parameters
+const recency_lambda = 0.7;        // recency weighting base: w_b = recency_lambda^(B-b)
+const exploration_epsilon = 0.25;  // exploration constant: W_i = exploration_epsilon + Difficulty_i
+const max_reps_per_block = 3;      // cap on same-stimulus repeats within one block
 
 const feedback_dur = 3000;
 

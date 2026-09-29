@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-categorize-image@2.1.0"></script> <!-- Categorize images -->
     <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script> <!-- Fullscreen mode -->
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script> <!-- Buttons & html -->
-    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script> <!-- DataPipe -->
+    <script src="https://unpkg.com/@jspsych/extension-pipe@0.2.0"></script> <!-- DataPipe -->
     <script src="https://unpkg.com/@jspsych/plugin-browser-check@2.1.0"></script> <!-- Device check -->
     <script src="https://unpkg.com/@jspsych/plugin-external-html@2.1.0"></script> <!-- External html -->
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script> <!-- Text & keyboard responses -->
@@ -60,101 +60,71 @@
 <body></body>
 <script>
 
-    // Begin Experiment
-    let jsPsych = initJsPsych({
-        show_progress_bar: true, // show progress bar
-        auto_update_progress_bar: false, // We'll update manually
-        message_progress_bar: '', // We'll set manually
-        case_sensitive_responses: false, // responses are NOT case sensitive
-        on_finish: function(){
-            // redirect for Prolific participants
-            if (recruitment_source === 'prolific') {
-                window.location = prolific_completion_url;
-            }
-        }
-    });
-
-    // Save date
-    jsPsych.data.addProperties({
-        full_date: full_date,
-        date: date,
-        time: time
-    });
+    // Everything below (subject ID, condition assignment, filename) is resolved
+    // BEFORE initJsPsych() is called, for two reasons:
+    // 1. The pipe extension resolves its `filename` param synchronously when it
+    //    initializes. If initJsPsych() ran before we knew the condition/subject info,
+    //    the extension would silently fall back to an auto-generated DataPipe session
+    //    name instead of our intended `<condition>_<subject_id>_<date>_<time>.json`.
+    // 2. jsPsychExtensionPipe.getCondition() is a standalone static method (it doesn't
+    //    need a jsPsych instance), and the jsPsych docs explicitly call it before
+    //    initJsPsych() in their own examples.
 
     // Subject ID
     // extract ID from URL parameters (Prolific or Sona) or generate random ID
-    const prolific_pid = jsPsych.data.getURLVariable('PROLIFIC_PID');
-    const sona_id = jsPsych.data.getURLVariable('id');
+    // (plain URLSearchParams here, since jsPsych doesn't exist yet at this point)
+    const url_params = new URLSearchParams(window.location.search);
+    const prolific_pid = url_params.get('PROLIFIC_PID');
+    const sona_id = url_params.get('id');
 
     let recruitment_source, subject_id, study_id, session_id;
 
     if (prolific_pid) {
         recruitment_source = 'prolific';
         subject_id = prolific_pid;
-        study_id = jsPsych.data.getURLVariable('STUDY_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
-        session_id = jsPsych.data.getURLVariable('SESSION_ID') ?? 'random_' + jsPsych.randomization.randomID(8);
+        study_id = url_params.get('STUDY_ID') ?? 'random_' + randomID(8);
+        session_id = url_params.get('SESSION_ID') ?? 'random_' + randomID(8);
     } else if (sona_id) {
         recruitment_source = 'sona';
         subject_id = sona_id;
-        study_id = 'random_' + jsPsych.randomization.randomID(8);
-        session_id = 'random_' + jsPsych.randomization.randomID(8);
+        study_id = 'random_' + randomID(8);
+        session_id = 'random_' + randomID(8);
     } else {
         recruitment_source = 'unknown';
-        subject_id = 'random_' + jsPsych.randomization.randomID(8);
-        study_id = 'random_' + jsPsych.randomization.randomID(8);
-        session_id = 'random_' + jsPsych.randomization.randomID(8);
+        subject_id = 'random_' + randomID(8);
+        study_id = 'random_' + randomID(8);
+        session_id = 'random_' + randomID(8);
     }
-
-    // Save subject info
-    jsPsych.data.addProperties({
-        subject_id: subject_id,
-        study_id: study_id,
-        session_id: session_id
-    });
 
     // Get condition and study items
     // Use DataPipe API for balanced data collection
     async function get_condition() {
         let condition_num;
         let cond_assign_source = "DataPipe"; // default to DataPipe
-        
-        try { condition_num = await jsPsychPipe.getCondition(DataPipe_Exp_ID);} 
+
+        try { condition_num = await jsPsychExtensionPipe.getCondition(DataPipe_Exp_ID);}
         catch (error) { console.warn("DataPipe condition assignment failed:", error); }
 
         // Fallback if DataPipe returns undefined or fails
         if (condition_num === undefined || condition_num === null) {
             console.warn("Falling back to random condition assignment");
-            condition_num = Math.floor(Math.random() * 3);
+            condition_num = Math.floor(Math.random() * 2);
             cond_assign_source = "Random";
         }
 
-        const condition = ["low", "high-sub-prototype", "high-random"][condition_num];
+        const condition = ["low", "high-sub-prototype"][condition_num];
 
-        let train_image_id = [];
+        const train_image_id = condition === "low"
+            ? [4, 6, 16, 33, 35, 37, 52, 56, 71, 80,
+               353, 356, 387, 396, 408, 409, 411, 424, 465, 471]
+            : [6, 17, 48, 56, 66, 84, 97, 119, 131, 149,
+               330, 348, 353, 372, 396, 411, 432, 448, 460, 469];
 
-        if (condition === "low") {
-            train_image_id = [4, 6, 16, 33, 35, 37, 52, 56, 71, 80,
-                             353, 356, 387, 396, 408, 409, 411, 424, 465, 471];
-
-        } else if (condition === "high-sub-prototype") {
-            train_image_id = [6, 17, 48, 56, 66, 84, 97, 119, 131, 149,
-                             330, 348, 353, 372, 396, 411, 432, 448, 460, 469];
-                             
-        }
-
-        // Save condition info
-        jsPsych.data.addProperties({ 
-            condition: condition, 
-            cond_assign_source: cond_assign_source 
-        });
-
-        return { condition, train_image_id }; // return both so runTrials can use them
+        return { condition, cond_assign_source, train_image_id };
     }
 
-    // Function to run trials
+    // Function to run trials (assumes jsPsych, condition and train_image_id are already set)
     async function runTrials() {
-        // Condition
-        const { condition, train_image_id } = await get_condition();
 
         // Read CSV
         const response = await fetch(stim_table_file);
@@ -174,23 +144,25 @@
             train_image_id.includes(parseInt(row.image_id))
         );
         study_table.forEach(row => {
-            row.full_path = `${img_folder}${row.filename}`; // add full path to img
+            row.full_path = `${img_folder}${encodeURIComponent(row.filename)}`; // add full path to img (encode: some filenames contain spaces)
             row.object_type = 'study'; // Always a study object
         });
 
         // Test images
         const test_table = all_stim_table.map(row => ({
             ...row,
-            full_path: `${img_folder}${row.filename}`, // add full path to img
+            full_path: `${img_folder}${encodeURIComponent(row.filename)}`, // add full path to img (encode: some filenames contain spaces)
             object_type: train_image_id.includes(parseInt(row.image_id)) ? 'study' : 'novel' // Study or Novel object
         }));
 
 
         // Preload img
-        preload = {
+        const preload = {
             type: jsPsychPreload,
             images: test_table.map(row => row.full_path), // preload all images (study + test)
             message: `<p style="font-size:${instructions_font_size}px;">Experiment is loading...</p>`,
+            continue_after_error: true, // don't hard-block the whole experiment over a handful of failed image loads
+            show_detailed_errors: true,
             on_start: function() {
                 var progressBar = document.querySelector('#jspsych-progressbar-container');
                 if (progressBar) progressBar.style.display = 'none';
@@ -228,6 +200,7 @@
                 sub_category: jsPsych.timelineVariable('sub_category'),
                 sub_cat_item: jsPsych.timelineVariable('sub_cat_item'),
                 object_type: jsPsych.timelineVariable('object_type'),
+                block: jsPsych.timelineVariable('block'),
             },
             on_finish: function(data) {
                 const trials_done = jsPsych.data.get().filter({task: 'study'}).count();
@@ -237,15 +210,56 @@
         };
 
 
-        const study_block = {
-            timeline: [study_trial,fast_warning,slow_warning],
-            timeline_variables: study_table,
-            randomize_order: true, // randomize order within a block
-        };
+        // Categories present in the study set (derived, not hardcoded to 'I'/'S')
+        const study_categories = [...new Set(study_table.map(row => row.category))];
 
-        // repeat block multiple times
+        // Build the trial list + jsPsych timeline node for a given study block.
+        // Block 1 is non-adaptive (every stimulus once). From block 2 onward, stimuli
+        // are drawn via recency-weighted adaptive sampling, separately per category,
+        // based on all responses collected in previous blocks.
+        function buildStudyBlockNode(blockNum) {
+            let sampled_rows;
+
+            if (blockNum === 1) {
+                sampled_rows = study_table; // one presentation of each of the 20 stimuli
+            } else {
+                const history = jsPsych.data.get().filter({ task: 'study' }).values();
+                const completedBlocks = blockNum - 1;
+                const weights = computeSamplingWeights(
+                    history, study_table, completedBlocks, recency_lambda, exploration_epsilon
+                );
+
+                sampled_rows = [];
+                study_categories.forEach(function(cat) {
+                    const items_for_cat = study_table.filter(row => row.category === cat);
+                    const drawn = weightedSampleWithCap(
+                        items_for_cat, weights, study_img_per_cat, max_reps_per_block
+                    );
+                    sampled_rows = sampled_rows.concat(drawn);
+                });
+            }
+
+            // Copy rows (don't mutate the shared study_table) and tag with the block number.
+            const block_timeline_variables = sampled_rows.map(row => ({ ...row, block: blockNum }));
+
+            return {
+                timeline: [study_trial, fast_warning, slow_warning],
+                timeline_variables: block_timeline_variables,
+                randomize_order: true, // randomize order within a block
+                on_timeline_finish: function() {
+                    if (blockNum < n_study_blocks) {
+                        study_blocks_array.push(buildStudyBlockNode(blockNum + 1));
+                    }
+                }
+            };
+        }
+
+        // Self-extending array: each block, once finished, pushes the next (adaptively
+        // built) block onto this same array reference, which jsPsych keeps reading from.
+        let study_blocks_array = [buildStudyBlockNode(1)];
+
         const study_phase = {
-            timeline: Array(n_study_blocks).fill(study_block),
+            timeline: study_blocks_array,
             on_timeline_start: function() {
                 document.body.style.cursor = 'none';
                 setTimeout(() => updateProgressBar(0, 'Study Phase'), 100);
@@ -300,41 +314,92 @@
         };
 
 
-        // Save data
-        // Filename format example: low_88301_2025-11-06_16-13-26.json
-        const saved_filename = `${condition}_${subject_id}_${date}_${saved_at}.json`;
-        const save_data = {
-            type: jsPsychPipe,
-            action: "save",
-            experiment_id: DataPipe_Exp_ID,
-            filename: saved_filename,
-            data_string: ()=>jsPsych.data.get().json(),
-            on_start: function() {
-                // Hide progress bar
-                 var progressBar = document.querySelector('#jspsych-progressbar-container');
-                 if (progressBar) { progressBar.style.display = 'none'; }
-             }
-        };
+        // Data saving is handled automatically by the pipe extension (registered in
+        // initJsPsych, inside main() below) at the end of the experiment — no separate
+        // save trial needed.
 
         // Build and run timeline
         let timeline = [];
         timeline.push(
-            device_check,  
+            device_check,
             consentTrial,
-            enter_fullscreen, 
+            enter_fullscreen,
             preload,
             instructions,
             study_phase,
             between_phases,
             test_phase,
-            save_data,
-            exit_fullscreen,
-            debrief
+            exit_fullscreen
         );
         jsPsych.run(timeline);
     }
 
-    runTrials(); // Run experiment
+    // Orchestrate startup: resolve condition (and the filename that depends on it)
+    // BEFORE initializing jsPsych, so the pipe extension always saves under the
+    // intended filename instead of an auto-generated fallback (see comment near the
+    // top of this script for why).
+    let jsPsych, condition, train_image_id, saved_filename;
+
+    async function main() {
+        const result = await get_condition();
+        condition = result.condition;
+        train_image_id = result.train_image_id;
+
+        // Filename format example: low_88301_2025-11-06_16-13-26.json
+        saved_filename = `${condition}_${subject_id}_${date}_${saved_at}.json`;
+
+        // Debrief content shown by the pipe extension's done_message, once data submission
+        // has finished (see src/debrief.html). Fetched now so it's ready before jsPsych.run().
+        const debrief_response = await fetch(debrief_file);
+        const debrief_html = await debrief_response.text();
+
+        // Begin Experiment
+        jsPsych = initJsPsych({
+            show_progress_bar: true, // show progress bar
+            auto_update_progress_bar: false, // We'll update manually
+            message_progress_bar: '', // We'll set manually
+            case_sensitive_responses: false, // responses are NOT case sensitive
+            extensions: [
+                {
+                    type: jsPsychExtensionPipe,
+                    params: {
+                        experiment_id: DataPipe_Exp_ID,
+                        stream: false, // don't upload after every trial; save once, at the end
+                        filename: () => saved_filename,
+                        format: "json",
+                        done_message: debrief_html, // shown once submission finishes (see src/debrief.html)
+                        on_save: (save_result) => {
+                            if (!save_result.ok) {
+                                console.error('DataPipe save failed:', save_result);
+                            }
+                        }
+                    }
+                }
+            ],
+            on_finish: function(){
+                // redirect for Prolific participants
+                if (recruitment_source === 'prolific') {
+                    window.location = Prolific_completion_url;
+                }
+            }
+        });
+
+        // Save date, subject and condition info
+        jsPsych.data.addProperties({
+            full_date: full_date,
+            date: date,
+            time: time,
+            subject_id: subject_id,
+            study_id: study_id,
+            session_id: session_id,
+            condition: condition,
+            cond_assign_source: result.cond_assign_source
+        });
+
+        runTrials(); // Run experiment
+    }
+
+    main();
 
 </script>
 </html>

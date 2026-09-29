@@ -119,39 +119,3 @@ let between_phases = {
   }
 };
 
-// Debriefing
-let debrief = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: (
-    `<div style="max-width: ${text_max_width}px; margin: auto; font-size: ${instructions_font_size}px; line-height: 1.5;">
-      <h1 style="text-align:center; font-size: ${instructions_font_size*1.5}px;">Debriefing</h1>
-      <p>
-        Congratulations! You have completed the experiment. Thank you for your participation. 
-        You will receive credit soon; please allow some time for processing. 
-        <b>Important</b>: Please do not run the experiment again.
-      </p>
-      <p>
-        In this study, we are investigating the most effective ways to learn new categories (concepts). 
-        Specifically, we are examining whether it is better to learn items that are most <b>similar</b> to the 
-        category&apos;s average representative (i.e., the most typical examples) 
-        <b>or</b> to learn a more <b>diverse</b> set of category members. 
-        We are also interested in determining which learning strategy leads to better generalization to new category members.
-        Your data will allow us to better understand category learning mechanisms of the human mind.
-      </p>
-      <p>
-        <b>Your data has been successfully saved</b> on our servers.  
-        You may now close this window at any time.  
-        If you have any questions or concerns, please feel free to contact the experimenter.  
-        Thank you again for your time and effort!
-      </p>
-    </div>`
-    ),
-  choices: [],
-  on_start: function() {
-    // Hide progress bar
-    var progressBar = document.querySelector('#jspsych-progressbar-container');
-    if (progressBar) {
-        progressBar.style.display = 'none';
-      }
-    }
-};
