@@ -9,7 +9,7 @@ const img_folder = 'https://cdn.jsdelivr.net/gh/DaniilAzarov123/Rocks_Database@m
 // for exactly this kind of asset delivery.
 const consent_file = source_folder + 'consent.html';
 const debrief_file = source_folder + 'debrief.html'; // shown via the pipe extension's done_message once data is submitted
-const stim_table_file = source_folder + 'testScript_stimuli_320_I_S.csv'; //'stimuli_320_I_S.csv';
+const stim_table_file = source_folder + 'stimuli_320_I_S.csv';
 const DataPipe_Exp_ID = 'liXj1j5gdAap'; // DataPipe experiment ID
 const Prolific_completion_url = "https://app.prolific.com/submissions/complete?cc=CIKR98K7"; // Prolific completion URL
 

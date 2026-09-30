@@ -156,18 +156,28 @@
         }));
 
 
-        // Preload img
-        const preload = {
-            type: jsPsychPreload,
-            images: test_table.map(row => row.full_path), // preload all images (study + test)
-            message: `<p style="font-size:${instructions_font_size}px;">Experiment is loading...</p>`,
-            continue_after_error: true, // don't hard-block the whole experiment over a handful of failed image loads
-            show_detailed_errors: true,
-            on_start: function() {
-                var progressBar = document.querySelector('#jspsych-progressbar-container');
-                if (progressBar) progressBar.style.display = 'none';
-            },
-        };
+        // Preload img, in batches rather than one request burst for all ~320 files.
+        // Firing every image at once overwhelmed the CDN: some images silently never
+        // finished preloading (continue_after_error let the experiment proceed anyway),
+        // and those specific images then had to load live during test-phase trials —
+        // showing up as multi-second delays or missing images for the participant.
+        const all_image_urls = test_table.map(row => row.full_path); // study + test images
+        const PRELOAD_BATCH_SIZE = 40;
+        const preload_trials = [];
+        for (let i = 0; i < all_image_urls.length; i += PRELOAD_BATCH_SIZE) {
+            const batch = all_image_urls.slice(i, i + PRELOAD_BATCH_SIZE);
+            const loaded_so_far = Math.min(i + PRELOAD_BATCH_SIZE, all_image_urls.length);
+            preload_trials.push({
+                type: jsPsychPreload,
+                images: batch,
+                message: `<p style="font-size:${instructions_font_size}px;">Experiment is loading... (${loaded_so_far}/${all_image_urls.length})</p>`,
+                continue_after_error: true, // don't hard-block the whole experiment over a handful of failed image loads
+                on_start: function() {
+                    var progressBar = document.querySelector('#jspsych-progressbar-container');
+                    if (progressBar) progressBar.style.display = 'none';
+                },
+            });
+        }
 
         // Study phase
         const study_trial = {
@@ -324,7 +334,7 @@
             device_check,
             consentTrial,
             enter_fullscreen,
-            preload,
+            ...preload_trials,
             instructions,
             study_phase,
             between_phases,
